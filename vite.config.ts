@@ -55,7 +55,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         "/api": {
-          target: "https://promptql.ddn.hasura.app",
+          target: "http://localhost:8080",
           changeOrigin: true,
           secure: true,
           rewrite: (path) => path.replace(/^\/api/, ""),
@@ -64,18 +64,10 @@ export default defineConfig(({ mode }) => {
               console.log("proxy error", err);
             });
             proxy.on("proxyReq", (_proxyReq, req, _res) => {
-              console.log(
-                "Sending Request to the Target:",
-                req.method,
-                req.url,
-              );
+              console.log("Sending Request to the Target:", req.method, req.url);
             });
             proxy.on("proxyRes", (proxyRes, req, _res) => {
-              console.log(
-                "Received Response from the Target:",
-                proxyRes.statusCode,
-                req.url,
-              );
+              console.log("Received Response from the Target:", proxyRes.statusCode, req.url);
             });
           },
         },
