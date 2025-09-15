@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Package files
+*.tgz
+
 # Environment files
 .env
 .env.local
