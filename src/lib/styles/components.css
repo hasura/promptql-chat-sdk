@@ -1,0 +1,246 @@
+/* PromptQL Chat SDK Component Styles */
+
+/* Base component styles using CSS custom properties */
+.promptql-chat {
+  --promptql-primary: #3b82f6;
+  --promptql-background: #ffffff;
+  --promptql-surface: #f9fafb;
+  --promptql-text: #111827;
+  --promptql-text-secondary: #6b7280;
+  --promptql-border: #e5e7eb;
+  --promptql-error: #ef4444;
+  --promptql-success: #10b981;
+}
+
+/* FAB Component */
+.promptql-chat__fab {
+  /* Reset button styles */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  /* Ensure proper font rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Prevent text selection */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  /* Prevent tap highlight on mobile */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.promptql-chat__fab:focus-visible {
+  outline: 2px solid var(--promptql-primary);
+  outline-offset: 2px;
+}
+
+/* Modal Components */
+.promptql-chat__modal-overlay {
+  /* Ensure proper backdrop blur support */
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.promptql-chat__modal {
+  /* Ensure proper scrolling on mobile */
+  -webkit-overflow-scrolling: touch;
+
+  /* Prevent content from being selectable during animation */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.promptql-chat__modal[aria-modal="true"] {
+  /* Re-enable text selection when modal is fully open */
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Responsive utilities */
+@media (max-width: 480px) {
+  .promptql-chat__fab {
+    /* Slightly smaller on mobile for better thumb reach */
+    width: 56px !important;
+    height: 56px !important;
+    bottom: 16px !important;
+    right: 16px !important;
+  }
+
+  .promptql-chat__modal {
+    /* Full screen on mobile */
+    border-radius: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .promptql-chat__fab {
+    border: 2px solid currentColor;
+  }
+
+  .promptql-chat__modal {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .promptql-chat__fab,
+  .promptql-chat__modal,
+  .promptql-chat__modal-overlay {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Dark mode is handled via JavaScript theme detection and application
+   The CSS custom properties are set dynamically via applyThemeToElement() */
+
+/* Focus management for modal */
+.promptql-chat__modal:focus {
+  outline: none;
+}
+
+/* Ensure proper stacking context */
+.promptql-chat__fab,
+.promptql-chat__modal-overlay,
+.promptql-chat__modal {
+  isolation: isolate;
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Chat Interface Components */
+.promptql-chat__interface {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", sans-serif;
+}
+
+.promptql-chat__message-list {
+  scrollbar-width: thin;
+  scrollbar-color: var(--promptql-border) transparent;
+}
+
+.promptql-chat__message-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.promptql-chat__message-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.promptql-chat__message-list::-webkit-scrollbar-thumb {
+  background-color: var(--promptql-border);
+  border-radius: 3px;
+}
+
+.promptql-chat__message-list::-webkit-scrollbar-thumb:hover {
+  background-color: var(--promptql-text-secondary);
+}
+
+.promptql-chat__input-field {
+  scrollbar-width: thin;
+  scrollbar-color: var(--promptql-border) transparent;
+}
+
+.promptql-chat__input-field::-webkit-scrollbar {
+  width: 4px;
+}
+
+.promptql-chat__input-field::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.promptql-chat__input-field::-webkit-scrollbar-thumb {
+  background-color: var(--promptql-border);
+  border-radius: 2px;
+}
+
+/* Input button specific styles to override global button styles */
+.promptql-chat__input-button {
+  border-radius: 12px !important;
+  padding: 0 !important;
+}
+
+/* Message animations */
+.promptql-chat__message-item {
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Connection indicator animations */
+.promptql-chat__connection-indicator [style*="pulse"] {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Utility classes for component states */
+.promptql-chat--loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.promptql-chat--error {
+  border-color: var(--promptql-error);
+}
+
+.promptql-chat--success {
+  border-color: var(--promptql-success);
+}

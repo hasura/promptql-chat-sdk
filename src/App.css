@@ -1,0 +1,75 @@
+.app {
+  min-height: 100vh;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.app-header h1 {
+  color: #3b82f6;
+  margin-bottom: 1rem;
+}
+
+.app-header p {
+  color: #6b7280;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.app-main {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .app-main {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.demo-section {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.demo-section h2 {
+  color: #111827;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.demo-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.demo-section li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.demo-section li:last-child {
+  border-bottom: none;
+}
+
+.demo-section pre {
+  background: #1f2937;
+  color: #f9fafb;
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.demo-section code {
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+}
