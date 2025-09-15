@@ -20,7 +20,7 @@ function getApiEndpoint(): string {
 
   // In production, use the full URL
   // Environment variables can be used to override the default endpoint
-  return import.meta.env.VITE_API_ENDPOINT || "https://promptql.ddn.hasura.app";
+  return import.meta.env.VITE_API_ENDPOINT || "https://promptql.ddn.pro.hasura.io";
 }
 
 /**

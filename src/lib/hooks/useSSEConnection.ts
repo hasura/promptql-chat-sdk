@@ -7,7 +7,7 @@ import { isValidThreadId } from "../utils";
  * Hook for managing SSE connections for real-time message streaming
  * Handles connection lifecycle, event parsing, and automatic reconnection
  */
-export function useSSEConnection(endpoint: string, apiKey: string, onEvent?: SSEEventCallback): UseSSEConnectionReturn {
+export function useSSEConnection(endpoint: string, onEvent?: SSEEventCallback): UseSSEConnectionReturn {
   const [connectionState, setConnectionState] = useState<ConnectionState>("disconnected");
   const [error, setError] = useState<Error | null>(null);
   const [lastEvent, setLastEvent] = useState<any>(null);
@@ -130,13 +130,16 @@ export function useSSEConnection(endpoint: string, apiKey: string, onEvent?: SSE
         const sseUrl = `${endpoint}${API_ENDPOINTS.SSE_THREAD(threadId)}`;
 
         // Use fetch with proper headers instead of EventSource
+        const headers: HeadersInit = {
+          Accept: "text/event-stream",
+          "Cache-Control": "no-cache",
+        };
+
+        // No Authorization header needed - proxy handles authentication
+
         const response = await fetch(sseUrl, {
           method: "GET",
-          headers: {
-            Accept: "text/event-stream",
-            Authorization: `api-key ${apiKey}`,
-            "Cache-Control": "no-cache",
-          },
+          headers,
         });
 
         if (!response.ok) {
@@ -222,7 +225,7 @@ export function useSSEConnection(endpoint: string, apiKey: string, onEvent?: SSE
         }
       }
     },
-    [disconnect, handleOpen, handleMessage, apiKey]
+    [disconnect, handleOpen, handleMessage]
   );
 
   // Cleanup on unmount

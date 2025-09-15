@@ -25,7 +25,6 @@ import "../../styles/components.css";
  */
 const PromptQLChat: React.FC<PromptQLChatProps> = ({
   endpoint,
-  apiKey,
   ddnToken,
   primaryColor,
   backgroundColor,
@@ -166,19 +165,18 @@ const PromptQLChat: React.FC<PromptQLChatProps> = ({
   const healthCheckConfig = useMemo(
     () => ({
       endpoint,
-      apiKey,
       interval: 30000,
       autoStart: false, // Disable autoStart to avoid StrictMode issues
     }),
-    [endpoint, apiKey]
+    [endpoint]
   );
 
   // Hooks
   const themeDetection = useThemeDetection();
   const threadPersistence = useThreadPersistence("promptql-chat");
   const modalPersistence = useModalPersistence("promptql-chat");
-  const api = usePromptQLAPI(endpoint, apiKey, ddnToken);
-  const sse = useSSEConnection(endpoint, apiKey, handleSSEEvent);
+  const api = usePromptQLAPI(endpoint, ddnToken);
+  const sse = useSSEConnection(endpoint, handleSSEEvent);
   const healthCheck = useHealthCheck(healthCheckConfig);
 
   // Manually start health checks after component is stable (avoid StrictMode issues)

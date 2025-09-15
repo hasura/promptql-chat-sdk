@@ -22,7 +22,7 @@ import {
  * Hook for HTTP interactions with PromptQL threads/v2 API
  * Handles authentication, request formatting, error handling, and retry logic
  */
-export function usePromptQLAPI(endpoint: string, apiKey: string, ddnToken?: string): UsePromptQLAPIReturn {
+export function usePromptQLAPI(endpoint: string, ddnToken?: string): UsePromptQLAPIReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<PromptQLError | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -31,11 +31,11 @@ export function usePromptQLAPI(endpoint: string, apiKey: string, ddnToken?: stri
   const createHeaders = useCallback((): HeadersInit => {
     const headers: HeadersInit = {
       "Content-Type": "application/json",
-      Authorization: `api-key ${apiKey}`,
     };
 
+    // No Authorization header needed - proxy handles authentication
     return headers;
-  }, [apiKey]);
+  }, []);
 
   // Generic fetch wrapper with retry logic
   const fetchWithRetry = useCallback(
@@ -273,9 +273,10 @@ export function usePromptQLAPI(endpoint: string, apiKey: string, ddnToken?: stri
         // Create headers with text/event-stream accept header for thread retrieval
         const headers: HeadersInit = {
           Accept: "text/event-stream",
-          Authorization: `api-key ${apiKey}`,
           "Cache-Control": "no-cache",
         };
+
+        // No Authorization header needed - proxy handles authentication
 
         // Use fetch directly to handle SSE response
         const response = await fetch(`${endpoint}${API_ENDPOINTS.GET_THREAD(threadId)}`, {
@@ -399,7 +400,7 @@ export function usePromptQLAPI(endpoint: string, apiKey: string, ddnToken?: stri
         setIsLoading(false);
       }
     },
-    [apiKey, endpoint]
+    [endpoint]
   );
 
   // Clear error state

@@ -1,6 +1,7 @@
 # PromptQL Chat SDK
 
-A flexible React SDK for integrating PromptQL-powered chat interfaces into your applications. Whether you need a quick drop-in solution, custom component layouts, or complete UI control, this SDK adapts to your integration requirements.
+A flexible React SDK for integrating PromptQL-powered chat interfaces into your applications. Whether you need a quick
+drop-in solution, custom component layouts, or complete UI control, this SDK adapts to your integration requirements.
 
 **Three ways to integrate:**
 
@@ -8,7 +9,8 @@ A flexible React SDK for integrating PromptQL-powered chat interfaces into your 
 - **Component Library** - Mix and match individual components for custom layouts
 - **Headless Hook** - Build any UI while leveraging our state management and API integration
 
-All integration approaches include SSE-powered real-time responses, thread persistence across sessions, customizable theming, and comprehensive TypeScript support.
+All integration approaches include SSE-powered real-time responses, thread persistence across sessions, customizable
+theming, and comprehensive TypeScript support.
 
 ## Installation
 
@@ -39,11 +41,7 @@ function App() {
     <div>
       <h1>My Application</h1>
 
-      <PromptQLChat
-        endpoint="your-data-plane-url"
-        apiKey="your-api-key"
-        ddnToken="your-ddn-token"
-      />
+      <PromptQLChat endpoint="http://localhost:8080" ddnToken="your-ddn-token" />
     </div>
   );
 }
@@ -57,12 +55,7 @@ props listed above are the _only_ ones required.
 Use individual components for custom layouts and positioning:
 
 ```tsx
-import {
-  ChatFAB,
-  ChatModal,
-  ChatInterface,
-  getDefaultTheme,
-} from "promptql-chat-sdk";
+import { ChatFAB, ChatModal, ChatInterface, getDefaultTheme } from "promptql-chat-sdk";
 import { useState } from "react";
 
 function CustomLayout() {
@@ -91,8 +84,7 @@ function CustomLayout() {
         onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
         theme={theme}
         title="Customer Support"
-        className="custom-modal-styling"
-      >
+        className="custom-modal-styling">
         <div className="custom-chat-header">
           <h3>How can we help you today?</h3>
         </div>
@@ -150,8 +142,7 @@ function CompletelyCustomChat() {
     error,
     clearError,
   } = usePromptQLChat({
-    endpoint: "your-data-plane-url",
-    apiKey: "your-api-key",
+    endpoint: "http://localhost:8080", // Your proxy server
     ddnToken: "your-ddn-token",
     primaryColor: "#10b981",
     onThreadStart: (threadId) => {
@@ -166,13 +157,8 @@ function CompletelyCustomChat() {
     <div className="custom-chat-app">
       <header>
         <h1>My Custom Chat Interface</h1>
-        <button
-          onClick={toggleModal}
-          className="chat-trigger"
-          style={{ backgroundColor: theme.colors.primary }}
-        >
-          Chat ({connectionState}){" "}
-          {messages.length > 0 && `(${messages.length})`}
+        <button onClick={toggleModal} className="chat-trigger" style={{ backgroundColor: theme.colors.primary }}>
+          Chat ({connectionState}) {messages.length > 0 && `(${messages.length})`}
         </button>
       </header>
 
@@ -182,9 +168,7 @@ function CompletelyCustomChat() {
             <div className="modal-header">
               <h2>AI Assistant</h2>
               <div className="header-actions">
-                <button onClick={toggleFullscreen}>
-                  {isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
-                </button>
+                <button onClick={toggleFullscreen}>{isFullscreen ? "Exit Fullscreen" : "Fullscreen"}</button>
                 <button onClick={closeModal}>Close</button>
               </div>
             </div>
@@ -218,9 +202,7 @@ function CompletelyCustomChat() {
             <div className="modal-footer">
               <div className="chat-actions">
                 <button onClick={startNewThread}>New Conversation</button>
-                <span className="connection-status">
-                  Status: {connectionState}
-                </span>
+                <span className="connection-status">Status: {connectionState}</span>
               </div>
             </div>
           </div>
@@ -230,6 +212,47 @@ function CompletelyCustomChat() {
   );
 }
 ```
+
+## 🔒 Security Best Practices
+
+**⚠️ Important: API Key Security**
+
+Never expose your PromptQL API key in client-side code. API keys should be kept secure on your server.
+
+### Recommended: Use a Proxy Server
+
+The most secure approach is to use a proxy server that handles API key injection:
+
+```tsx
+// ✅ SECURE: Using proxy endpoint
+<PromptQLChat
+  endpoint="http://localhost:8080" // Your proxy server
+  ddnToken="your-ddn-token"
+/>
+```
+
+### Quick Proxy Setup
+
+We provide a ready-to-use nginx proxy in the `proxy/` directory:
+
+```bash
+cd proxy
+cp .env.example .env
+# Edit .env and add your PROMPTQL_API_KEY
+./start-proxy.sh
+```
+
+The proxy will:
+
+- ✅ Keep your API key secure on the server
+- ✅ Handle CORS headers properly
+- ✅ Support Server-Sent Events (SSE)
+- ✅ Provide rate limiting and logging
+- ✅ Work in development and production
+
+**For all applications, always use the proxy approach for security.**
+
+See the [proxy documentation](./proxy/README.md) for detailed setup instructions.
 
 ## API Reference
 
@@ -254,11 +277,7 @@ import {
 import { usePromptQLChat } from "promptql-chat-sdk";
 
 // Utilities
-import {
-  getDefaultTheme,
-  mergeThemeColors,
-  applyThemeToElement,
-} from "promptql-chat-sdk";
+import { getDefaultTheme, mergeThemeColors, applyThemeToElement } from "promptql-chat-sdk";
 ```
 
 ### Types

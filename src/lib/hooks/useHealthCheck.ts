@@ -8,8 +8,6 @@ import { API_ENDPOINTS, HTTP_STATUS } from "../utils/constants";
 export interface UseHealthCheckConfig {
   /** Base endpoint URL */
   endpoint: string;
-  /** API key for authentication */
-  apiKey: string;
   /** Health check interval in milliseconds (default: 30000 = 30 seconds) */
   interval?: number;
   /** Whether to start health checks immediately (default: true) */
@@ -44,7 +42,6 @@ export interface UseHealthCheckReturn {
  */
 export function useHealthCheck({
   endpoint,
-  apiKey,
   interval = 30000,
   autoStart = true,
 }: UseHealthCheckConfig): UseHealthCheckReturn {
@@ -117,7 +114,7 @@ export function useHealthCheck({
         abortControllerRef.current = null;
       }
     }
-  }, [endpoint, apiKey]);
+  }, [endpoint]);
 
   // Start periodic health checks
   const startHealthChecks = useCallback(() => {

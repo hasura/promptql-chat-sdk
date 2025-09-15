@@ -140,10 +140,8 @@ export interface Thread {
 
 // Component Props Types
 export interface PromptQLChatProps {
-  /** PromptQL API endpoint URL */
+  /** PromptQL API endpoint URL (should point to your secure proxy server) */
   endpoint: string;
-  /** API key for PromptQL authentication */
-  apiKey: string;
   /** DDN token for data access */
   ddnToken?: string;
   /** Primary color for theming */

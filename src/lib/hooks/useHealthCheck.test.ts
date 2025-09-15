@@ -8,8 +8,7 @@ global.fetch = mockFetch;
 
 describe("useHealthCheck", () => {
   const defaultConfig = {
-    endpoint: "https://promptql.ddn.hasura.app",
-    apiKey: "test-api-key",
+    endpoint: "https://promptql.ddn.pro.hasura.io",
     interval: 1000,
     autoStart: false, // Disable auto-start for tests
   };
@@ -53,7 +52,7 @@ describe("useHealthCheck", () => {
         expect.objectContaining({
           method: "GET",
           signal: expect.any(AbortSignal),
-        }),
+        })
       );
     });
 
@@ -73,9 +72,7 @@ describe("useHealthCheck", () => {
       expect(checkResult!).toBe(false);
       expect(result.current.healthStatus).toBe("error");
       expect(result.current.error).toBeInstanceOf(Error);
-      expect(result.current.error?.message).toContain(
-        "Health check failed with status 500",
-      );
+      expect(result.current.error?.message).toContain("Health check failed with status 500");
     });
 
     it("should handle network errors", async () => {
@@ -92,9 +89,7 @@ describe("useHealthCheck", () => {
       expect(checkResult!).toBe(false);
       expect(result.current.healthStatus).toBe("error");
       expect(result.current.error).toBeInstanceOf(Error);
-      expect(result.current.error?.message).toContain(
-        "Health check failed: Network error",
-      );
+      expect(result.current.error?.message).toContain("Health check failed: Network error");
     });
 
     it("should clear error state", async () => {
@@ -169,9 +164,7 @@ describe("useHealthCheck", () => {
 
   describe("Cleanup", () => {
     it("should cleanup on unmount", () => {
-      const { result, unmount } = renderHook(() =>
-        useHealthCheck(defaultConfig),
-      );
+      const { result, unmount } = renderHook(() => useHealthCheck(defaultConfig));
 
       // Start health checks
       act(() => {
