@@ -1,6 +1,6 @@
 {
   "name": "promptql-chat-sdk",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A flexible React SDK for integrating PromptQL-powered chat interfaces into your applications.",
   "type": "module",
   "main": "./dist/index.js",
