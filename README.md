@@ -27,6 +27,12 @@ npm install promptql-chat-sdk
 
 ## Usage Patterns
 
+> [!NOTE]
+>
+> Before running the examples below, start a proxy server that forwards requests to the PromptQL API. See
+> [Authentication](#authentication) for context and setup, or jump straight to the
+> [proxy examples](./proxy-examples/README.md).
+
 The SDK supports three levels of customization to meet your various integration needs:
 
 ### 1. Drop-in Component
