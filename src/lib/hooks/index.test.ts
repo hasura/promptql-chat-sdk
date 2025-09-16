@@ -85,11 +85,9 @@ beforeEach(() => {
 
 describe("usePromptQLAPI", () => {
   const mockEndpoint = "https://api.test.com";
-  const mockProjectId = "test-project";
-  const mockAuthToken = "test-token";
 
   it("should initialize with default state", () => {
-    const { result } = renderHook(() => usePromptQLAPI(mockEndpoint, mockProjectId, mockAuthToken));
+    const { result } = renderHook(() => usePromptQLAPI(mockEndpoint));
 
     expect(result.current.isLoading).toBe(false);
     expect(result.current.error).toBe(null);
@@ -106,7 +104,7 @@ describe("usePromptQLAPI", () => {
       json: () => Promise.resolve(mockResponse),
     });
 
-    const { result } = renderHook(() => usePromptQLAPI(mockEndpoint, mockProjectId, mockAuthToken));
+    const { result } = renderHook(() => usePromptQLAPI(mockEndpoint));
 
     let threadId: string;
     await act(async () => {
@@ -126,7 +124,7 @@ describe("usePromptQLAPI", () => {
       text: () => Promise.resolve('{"message": "Invalid request"}'),
     });
 
-    const { result } = renderHook(() => usePromptQLAPI(mockEndpoint, mockProjectId, mockAuthToken));
+    const { result } = renderHook(() => usePromptQLAPI(mockEndpoint));
 
     await act(async () => {
       try {
@@ -141,7 +139,7 @@ describe("usePromptQLAPI", () => {
   });
 
   it("should validate thread ID format", async () => {
-    const { result } = renderHook(() => usePromptQLAPI(mockEndpoint, mockProjectId, mockAuthToken));
+    const { result } = renderHook(() => usePromptQLAPI(mockEndpoint));
 
     await act(async () => {
       try {
@@ -157,7 +155,6 @@ describe("usePromptQLAPI", () => {
 
 describe("useSSEConnection", () => {
   const testEndpoint = "https://test-api.example.com";
-  const testApiKey = "test-api-key";
 
   beforeEach(() => {
     // Mock fetch for SSE connections
@@ -181,7 +178,7 @@ describe("useSSEConnection", () => {
   });
 
   it("should initialize with disconnected state", () => {
-    const { result } = renderHook(() => useSSEConnection(testEndpoint, testApiKey));
+    const { result } = renderHook(() => useSSEConnection(testEndpoint));
 
     expect(result.current.connectionState).toBe("disconnected");
     expect(result.current.error).toBe(null);
@@ -190,7 +187,7 @@ describe("useSSEConnection", () => {
   });
 
   it("should connect to SSE endpoint", async () => {
-    const { result } = renderHook(() => useSSEConnection(testEndpoint, testApiKey));
+    const { result } = renderHook(() => useSSEConnection(testEndpoint));
 
     act(() => {
       result.current.connect("123e4567-e89b-12d3-a456-426614174000");
@@ -202,7 +199,7 @@ describe("useSSEConnection", () => {
   });
 
   it("should handle invalid thread ID", () => {
-    const { result } = renderHook(() => useSSEConnection(testEndpoint, testApiKey));
+    const { result } = renderHook(() => useSSEConnection(testEndpoint));
 
     act(() => {
       result.current.connect("invalid-thread-id");
@@ -213,7 +210,7 @@ describe("useSSEConnection", () => {
   });
 
   it("should disconnect properly", async () => {
-    const { result } = renderHook(() => useSSEConnection(testEndpoint, testApiKey));
+    const { result } = renderHook(() => useSSEConnection(testEndpoint));
 
     act(() => {
       result.current.connect("123e4567-e89b-12d3-a456-426614174000");

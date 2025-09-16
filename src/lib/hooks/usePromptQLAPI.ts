@@ -6,7 +6,6 @@ import type {
   ThreadResponse,
   Thread,
   PromptQLError,
-  DDNHeaders,
 } from "../types";
 import { API_ENDPOINTS, ERROR_CODES, DEFAULT_CONFIG, HTTP_STATUS } from "../utils/constants";
 import {
@@ -20,9 +19,9 @@ import {
 
 /**
  * Hook for HTTP interactions with PromptQL threads/v2 API
- * Handles authentication, request formatting, error handling, and retry logic
+ * Handles request formatting, error handling, and retry logic
  */
-export function usePromptQLAPI(endpoint: string, ddnToken?: string): UsePromptQLAPIReturn {
+export function usePromptQLAPI(endpoint: string): UsePromptQLAPIReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<PromptQLError | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -123,13 +122,9 @@ export function usePromptQLAPI(endpoint: string, ddnToken?: string): UsePromptQL
           });
         }
 
-        const ddnHeaders: DDNHeaders = {
-          Authorization: `Bearer ${ddnToken || ""}`,
-        };
-
         const requestBody: StartThreadRequest = {
           user_message: sanitizedMessage,
-          ddn_headers: ddnHeaders,
+          ddn_headers: {},
           timezone: getUserTimezone(),
         };
 
@@ -161,7 +156,7 @@ export function usePromptQLAPI(endpoint: string, ddnToken?: string): UsePromptQL
         setIsLoading(false);
       }
     },
-    [ddnToken, createHeaders, fetchWithRetry]
+    [createHeaders, fetchWithRetry]
   );
 
   // Continue an existing thread
@@ -185,13 +180,9 @@ export function usePromptQLAPI(endpoint: string, ddnToken?: string): UsePromptQL
           });
         }
 
-        const ddnHeaders: DDNHeaders = {
-          Authorization: `Bearer ${ddnToken || ""}`,
-        };
-
         const requestBody: ContinueThreadRequest = {
           user_message: sanitizedMessage,
-          ddn_headers: ddnHeaders,
+          ddn_headers: {},
           timezone: getUserTimezone(),
         };
 
@@ -216,7 +207,7 @@ export function usePromptQLAPI(endpoint: string, ddnToken?: string): UsePromptQL
         setIsLoading(false);
       }
     },
-    [ddnToken, createHeaders, fetchWithRetry]
+    [createHeaders, fetchWithRetry]
   );
 
   // Cancel a thread

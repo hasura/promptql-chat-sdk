@@ -1,6 +1,7 @@
 # Contributing to PromptQL Chat SDK
 
-Thank you for your interest in contributing to the PromptQL Chat SDK. This guide will help you get started with development, testing, and submitting contributions.
+Thank you for your interest in contributing to the PromptQL Chat SDK. This guide will help you get started with
+development, testing, and submitting contributions.
 
 ## Table of Contents
 
@@ -37,10 +38,6 @@ Thank you for your interest in contributing to the PromptQL Chat SDK. This guide
    Create a `.env.local` file in the root directory:
 
    ```bash
-   # Required - Your PromptQL API credentials
-   VITE_PQL_API_KEY=your_api_key_here
-   VITE_DDN_TOKEN=your_ddn_token_here
-
    # Optional - API endpoint (defaults to https://promptql.ddn.hasura.app)
    VITE_API_ENDPOINT=your_dataplane_url
    ```

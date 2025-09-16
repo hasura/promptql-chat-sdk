@@ -34,12 +34,8 @@ export const environment: EnvironmentConfig = {
 
 /**
  * Default configuration values that can be overridden by environment variables
- * Note: API keys and tokens should be provided via environment variables
  */
 export const defaultConfig = {
-  apiKey: import.meta.env.VITE_PQL_API_KEY || "",
-  projectId: import.meta.env.VITE_PROJECT_ID || "",
-  ddnToken: import.meta.env.VITE_DDN_TOKEN || "",
   primaryColor: import.meta.env.VITE_PRIMARY_COLOR || "#3b82f6",
   backgroundColor: import.meta.env.VITE_BACKGROUND_COLOR || "#ffffff",
   textColor: import.meta.env.VITE_TEXT_COLOR || "#111827",

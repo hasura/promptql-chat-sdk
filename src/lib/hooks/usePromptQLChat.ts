@@ -12,7 +12,6 @@ import type { Message, Theme, ConnectionState, PromptQLError } from "../types";
  */
 export interface UsePromptQLChatConfig {
   endpoint: string; // Should point to your secure proxy server
-  ddnToken?: string;
   primaryColor?: string;
   backgroundColor?: string;
   textColor?: string;
@@ -89,7 +88,7 @@ export interface UsePromptQLChatReturn {
  * ```
  */
 export function usePromptQLChat(config: UsePromptQLChatConfig): UsePromptQLChatReturn {
-  const { endpoint, ddnToken, primaryColor, backgroundColor, textColor, onThreadStart, onError } = config;
+  const { endpoint, primaryColor, backgroundColor, textColor, onThreadStart, onError } = config;
 
   // Chat state
   const [messages, setMessages] = useState<Message[]>([]);
@@ -155,7 +154,7 @@ export function usePromptQLChat(config: UsePromptQLChatConfig): UsePromptQLChatR
   const themeDetection = useThemeDetection();
   const threadPersistence = useThreadPersistence("promptql-chat");
   const modalPersistence = useModalPersistence("promptql-chat");
-  const api = usePromptQLAPI(endpoint, ddnToken);
+  const api = usePromptQLAPI(endpoint);
   const sseConnection = useSSEConnection(endpoint, handleSSEEvent);
 
   // Create merged theme

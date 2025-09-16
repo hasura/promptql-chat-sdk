@@ -1,0 +1,21 @@
+services:
+  promptql-proxy:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - PROMPTQL_API_KEY=${PROMPTQL_API_KEY}
+      - PROMPTQL_API_ENDPOINT=${PROMPTQL_API_ENDPOINT:-promptql.ddn.hasura.app:443}
+      - PROMPTQL_API_HOST=${PROMPTQL_API_HOST:-promptql.ddn.hasura.app}
+      - PROMPTQL_ACCESS_TOKEN=${PROMPTQL_ACCESS_TOKEN}
+      - PROMPTQL_PROJECT_ID=${PROMPTQL_PROJECT_ID}
+      - PROMPTQL_TOKEN_REFRESH_URL=${PROMPTQL_TOKEN_REFRESH_URL:-https://auth.pro.hasura.io/ddn/promptql/token}
+    volumes:
+      - ./logs:/var/log/nginx
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s

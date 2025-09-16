@@ -1,6 +1,5 @@
 // PromptQL API Types
 export interface DDNHeaders {
-  Authorization: string;
   [key: string]: string;
 }
 
@@ -142,8 +141,7 @@ export interface Thread {
 export interface PromptQLChatProps {
   /** PromptQL API endpoint URL (should point to your secure proxy server) */
   endpoint: string;
-  /** DDN token for data access */
-  ddnToken?: string;
+
   /** Primary color for theming */
   primaryColor?: string;
   /** Background color for theming */

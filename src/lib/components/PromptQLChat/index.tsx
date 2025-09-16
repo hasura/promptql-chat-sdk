@@ -25,7 +25,6 @@ import "../../styles/components.css";
  */
 const PromptQLChat: React.FC<PromptQLChatProps> = ({
   endpoint,
-  ddnToken,
   primaryColor,
   backgroundColor,
   textColor,
@@ -175,7 +174,7 @@ const PromptQLChat: React.FC<PromptQLChatProps> = ({
   const themeDetection = useThemeDetection();
   const threadPersistence = useThreadPersistence("promptql-chat");
   const modalPersistence = useModalPersistence("promptql-chat");
-  const api = usePromptQLAPI(endpoint, ddnToken);
+  const api = usePromptQLAPI(endpoint);
   const sse = useSSEConnection(endpoint, handleSSEEvent);
   const healthCheck = useHealthCheck(healthCheckConfig);
 

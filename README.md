@@ -41,14 +41,14 @@ function App() {
     <div>
       <h1>My Application</h1>
 
-      <PromptQLChat endpoint="http://localhost:8080" ddnToken="your-ddn-token" />
+      <PromptQLChat endpoint="http://localhost:8080" />
     </div>
   );
 }
 ```
 
 This renders a floating action button in the bottom-right corner that opens a full-featured chat modal when clicked. The
-props listed above are the _only_ ones required.
+endpoint prop listed above is the _only_ required prop.
 
 ### 2. Component Library
 
@@ -143,7 +143,7 @@ function CompletelyCustomChat() {
     clearError,
   } = usePromptQLChat({
     endpoint: "http://localhost:8080", // Your proxy server
-    ddnToken: "your-ddn-token",
+
     primaryColor: "#10b981",
     onThreadStart: (threadId) => {
       console.log("New conversation:", threadId);
@@ -213,46 +213,13 @@ function CompletelyCustomChat() {
 }
 ```
 
-## 🔒 Security Best Practices
+## Authentication
 
-**⚠️ Important: API Key Security**
+The SDK requires a proxy server to handle authentication. The proxy server should add the necessary headers for
+authentication and forward requests to the PromptQL API. This proxy server can be implemented using any technology, but
+we recommend using a lightweight solution like nginx or — if already using Next.js — a simple API route.
 
-Never expose your PromptQL API key in client-side code. API keys should be kept secure on your server.
-
-### Recommended: Use a Proxy Server
-
-The most secure approach is to use a proxy server that handles API key injection:
-
-```tsx
-// ✅ SECURE: Using proxy endpoint
-<PromptQLChat
-  endpoint="http://localhost:8080" // Your proxy server
-  ddnToken="your-ddn-token"
-/>
-```
-
-### Quick Proxy Setup
-
-We provide a ready-to-use nginx proxy in the `proxy/` directory:
-
-```bash
-cd proxy
-cp .env.example .env
-# Edit .env and add your PROMPTQL_API_KEY
-./start-proxy.sh
-```
-
-The proxy will:
-
-- ✅ Keep your API key secure on the server
-- ✅ Handle CORS headers properly
-- ✅ Support Server-Sent Events (SSE)
-- ✅ Provide rate limiting and logging
-- ✅ Work in development and production
-
-**For all applications, always use the proxy approach for security.**
-
-See the [proxy documentation](./proxy/README.md) for detailed setup instructions.
+See the [proxy examples documentation](./proxy-examples/README.md) for more information.
 
 ## API Reference
 
@@ -320,10 +287,6 @@ import {
   useThemeDetection, // System theme integration
 } from "promptql-chat-sdk";
 ```
-
-## Limitations
-
-As of version `0.1.0`, the SDK _only_ supports the Bearer strategy for connected PromptQL projects.
 
 ## Contributing
 
