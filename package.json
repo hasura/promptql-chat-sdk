@@ -17,7 +17,7 @@
     "dist"
   ],
   "scripts": {
-    "dev": "vite",
+    "dev": "npm --prefix examples/basic run dev",
     "dev:mcd": "VITE_DEMO=mcdonalds vite",
     "dev:arsenal": "VITE_DEMO=arsenal vite",
     "build": "tsc -b && vite build",

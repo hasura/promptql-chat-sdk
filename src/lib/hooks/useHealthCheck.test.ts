@@ -8,7 +8,7 @@ global.fetch = mockFetch;
 
 describe("useHealthCheck", () => {
   const defaultConfig = {
-    endpoint: "https://promptql.ddn.pro.hasura.io",
+    endpoint: "https://promptql.ddn.hasura.app",
     interval: 1000,
     autoStart: false, // Disable auto-start for tests
   };

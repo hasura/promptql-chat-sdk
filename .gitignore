@@ -32,6 +32,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# Examples
-examples/
