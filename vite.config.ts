@@ -12,7 +12,8 @@ export default defineConfig(({ mode }) => {
     // Library build configuration
     return {
       plugins: [
-        react(),
+        // Ensure automatic JSX runtime; avoid default React import in bundle
+        react({ jsxRuntime: "automatic" }),
         svgr(),
         dts({
           insertTypesEntry: true,
@@ -21,15 +22,20 @@ export default defineConfig(({ mode }) => {
           tsconfigPath: "./tsconfig.lib.json",
         }),
       ],
+      esbuild: {
+        jsx: "automatic",
+        jsxImportSource: "react",
+      },
       build: {
         lib: {
           entry: resolve(__dirname, "src/lib/index.ts"),
           name: "PromptQLChatSDK",
-          formats: ["es"],
+          formats: ["es", "cjs"],
           fileName: "index",
         },
         rollupOptions: {
-          external: ["react", "react-dom"],
+          // Keep React and the JSX runtime external to prevent bundling and interop issues
+          external: ["react", "react-dom", "react/jsx-runtime"],
           output: {
             globals: {
               react: "React",
