@@ -1,0 +1,128 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version bump type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      custom_version:
+        description: 'Custom version (optional, overrides version_type)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Preview release notes without creating release'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Determine new version
+        id: version
+        run: |
+          if [ -n "${{ github.event.inputs.custom_version }}" ]; then
+            NEW_VERSION="${{ github.event.inputs.custom_version }}"
+            echo "Using custom version: $NEW_VERSION"
+            # Update package.json with custom version
+            npm version $NEW_VERSION --no-git-tag-version
+          else
+            # Use npm version to bump and get the new version
+            NEW_VERSION=$(npm version ${{ github.event.inputs.version_type }} --no-git-tag-version | sed 's/^v//')
+            echo "Bumped ${{ github.event.inputs.version_type }} version to: $NEW_VERSION"
+          fi
+          echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "version-tag=v$NEW_VERSION" >> $GITHUB_OUTPUT
+      
+      - name: Generate release notes preview
+        id: release-notes
+        run: |
+          RESPONSE=$(curl -s -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${{ github.repository }}/releases/generate-notes \
+            -d '{
+              "tag_name": "${{ steps.version.outputs.version-tag }}",
+              "target_commitish": "main"
+            }')
+          
+          echo "Release notes preview:"
+          echo "$RESPONSE" | jq -r '.body'
+          
+          # Save for later steps
+          RELEASE_BODY=$(echo "$RESPONSE" | jq -r '.body')
+          echo "release-body<<EOF" >> $GITHUB_OUTPUT
+          echo "$RELEASE_BODY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Show preview and exit (dry run)
+        if: github.event.inputs.dry_run == 'true'
+        run: |
+          echo "🚀 DRY RUN: Release Preview for ${{ steps.version.outputs.version-tag }}"
+          echo ""
+          echo "📦 New version: ${{ steps.version.outputs.new-version }}"
+          echo ""
+          echo "📝 Release notes:"
+          echo "${{ steps.release-notes.outputs.release-body }}"
+          echo ""
+          echo "✅ This was a dry run. No release was created."
+          exit 0
+      
+      - name: Build package
+        if: github.event.inputs.dry_run != 'true'
+        run: npm run build:lib
+      
+      - name: Run tests
+        if: github.event.inputs.dry_run != 'true'
+        run: npm test
+      
+      - name: Commit version bump
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add package.json package-lock.json
+          git commit -m "chore: bump version to ${{ steps.version.outputs.new-version }}"
+          git push
+      
+      - name: Create GitHub release
+        if: github.event.inputs.dry_run != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create ${{ steps.version.outputs.version-tag }} --generate-notes --title "Release ${{ steps.version.outputs.version-tag }}"
+      
+      - name: Publish to npm
+        if: github.event.inputs.dry_run != 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish
+      
+      - name: Summary
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          echo "🎉 Successfully released ${{ steps.version.outputs.version-tag }}!"
+          echo "📦 Published to npm: https://www.npmjs.com/package/promptql-chat-sdk"
+          echo "🏷️ GitHub release: https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.version-tag }}"
