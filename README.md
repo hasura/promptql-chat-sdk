@@ -219,6 +219,89 @@ function CompletelyCustomChat() {
 }
 ```
 
+## Theming and Customization
+
+### Theme Mode Control
+
+The SDK automatically detects your system's theme preference (light/dark mode), but you can override this behavior using the `themeMode` prop. This is especially useful for integration with documentation sites like Docusaurus:
+
+```tsx
+import { PromptQLChat } from "promptql-chat-sdk";
+
+function App() {
+  return (
+    <div>
+      {/* Auto-detect system theme (default) */}
+      <PromptQLChat endpoint="/api" themeMode="auto" />
+
+      {/* Force light theme */}
+      <PromptQLChat endpoint="/api" themeMode="light" />
+
+      {/* Force dark theme */}
+      <PromptQLChat endpoint="/api" themeMode="dark" />
+    </div>
+  );
+}
+```
+
+#### Docusaurus Integration
+
+For Docusaurus sites, you can sync the chat theme with your site's theme:
+
+```tsx
+import { useColorMode } from '@docusaurus/theme-common';
+import { PromptQLChat } from "promptql-chat-sdk";
+
+function DocusaurusChat() {
+  const { colorMode } = useColorMode();
+
+  return (
+    <PromptQLChat
+      endpoint="/api"
+      themeMode={colorMode} // 'light' or 'dark'
+      title="Documentation Assistant"
+    />
+  );
+}
+```
+
+### Custom Colors
+
+You can customize the primary colors while maintaining theme consistency:
+
+```tsx
+<PromptQLChat
+  endpoint="/api"
+  themeMode="auto"
+  primaryColor="#10b981"
+  backgroundColor="#f8fafc"
+  textColor="#1e293b"
+/>
+```
+
+### Headless Hook Theming
+
+The headless hook also supports theme mode control:
+
+```tsx
+import { usePromptQLChat } from "promptql-chat-sdk";
+
+function CustomChat() {
+  const { theme, isDarkMode } = usePromptQLChat({
+    endpoint: "/api",
+    themeMode: "dark", // Force dark mode
+    primaryColor: "#3b82f6"
+  });
+
+  // Use theme.colors for styling your custom components
+  return (
+    <div style={{ backgroundColor: theme.colors.background }}>
+      {/* Your custom UI */}
+    </div>
+  );
+}
+```
+
 ## Authentication
 
 The SDK requires a proxy server to handle authentication. The proxy server should add the necessary headers for

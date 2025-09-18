@@ -142,6 +142,8 @@ export interface PromptQLChatProps {
   /** PromptQL API endpoint URL (should point to your secure proxy server) */
   endpoint: string;
 
+  /** Theme mode override - 'light', 'dark', or 'auto' (default: 'auto' uses system preference) */
+  themeMode?: 'light' | 'dark' | 'auto';
   /** Primary color for theming */
   primaryColor?: string;
   /** Background color for theming */
