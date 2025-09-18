@@ -12,6 +12,7 @@ import type { Message, Theme, ConnectionState, PromptQLError } from "../types";
  */
 export interface UsePromptQLChatConfig {
   endpoint: string; // Should point to your secure proxy server
+  themeMode?: 'light' | 'dark' | 'auto';
   primaryColor?: string;
   backgroundColor?: string;
   textColor?: string;
@@ -88,7 +89,7 @@ export interface UsePromptQLChatReturn {
  * ```
  */
 export function usePromptQLChat(config: UsePromptQLChatConfig): UsePromptQLChatReturn {
-  const { endpoint, primaryColor, backgroundColor, textColor, onThreadStart, onError } = config;
+  const { endpoint, themeMode = 'auto', primaryColor, backgroundColor, textColor, onThreadStart, onError } = config;
 
   // Chat state
   const [messages, setMessages] = useState<Message[]>([]);
@@ -151,7 +152,7 @@ export function usePromptQLChat(config: UsePromptQLChatConfig): UsePromptQLChatR
   }, []);
 
   // Initialize hooks
-  const themeDetection = useThemeDetection();
+  const themeDetection = useThemeDetection(themeMode);
   const threadPersistence = useThreadPersistence("promptql-chat");
   const modalPersistence = useModalPersistence("promptql-chat");
   const api = usePromptQLAPI(endpoint);
