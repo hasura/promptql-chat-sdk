@@ -4,8 +4,12 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import * as prismStyles from "react-syntax-highlighter/dist/esm/styles/prism";
-// Import specific VS Code themes
+// Import specific themes
 import oneDark from "react-syntax-highlighter/dist/esm/styles/prism/one-dark";
+import vscDarkPlus from "react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus";
+import vs from "react-syntax-highlighter/dist/esm/styles/prism/vs";
+import okaidia from "react-syntax-highlighter/dist/esm/styles/prism/okaidia";
+import dracula from "react-syntax-highlighter/dist/esm/styles/prism/dracula";
 import type { MessageItemProps } from "../../types";
 import { CSS_CLASSES } from "../../utils/constants";
 import { formatTimestamp } from "../../utils";
@@ -87,13 +91,34 @@ const CopyButton: React.FC<{
  */
 function getPrismStyleObject(themeName?: string) {
   switch (themeName) {
-    // Basic themes
-    case "one-dark":
-      return oneDark;
+    // Light themes
+    case "prism":
+      return prismStyles.prism;
+    case "vs":
+      return vs;
     case "tomorrow":
       return prismStyles.tomorrow;
+    case "coy":
+      return prismStyles.coy;
+
+    // Dark themes
+    case "dark":
+      return prismStyles.dark;
+    case "vsc-dark-plus":
+      return vscDarkPlus;
+    case "one-dark":
+      return oneDark;
+    case "okaidia":
+      return okaidia;
+    case "dracula":
+      return dracula;
+    case "twilight":
+      return prismStyles.twilight;
+    case "funky":
+      return prismStyles.funky;
+
     default:
-      return prismStyles.prism; // Default theme
+      return prismStyles.prism; // Default light theme
   }
 }
 

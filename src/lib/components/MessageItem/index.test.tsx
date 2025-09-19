@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import MessageItem from "./index";
 import { getDefaultTheme } from "../../utils";
-import type { UserMessage, AssistantMessage } from "../../types";
+import type { Message, UserMessage, AssistantMessage, PrismTheme } from "../../types";
 
 // Mock react-markdown
 jest.mock("react-markdown", () => {
@@ -255,6 +255,37 @@ describe("MessageItem", () => {
       expect(messageBubble).toHaveStyle({
         backgroundColor: darkTheme.colors.surface,
         color: darkTheme.colors.text,
+      });
+    });
+
+    it("renders with dark prism theme without errors", () => {
+      const darkTheme = getDefaultTheme("dark");
+      expect(() => {
+        render(<MessageItem {...defaultProps} message={assistantMessage} theme={darkTheme} prismTheme="vsc-dark-plus" />);
+      }).not.toThrow();
+    });
+
+    it("renders with light prism theme without errors", () => {
+      const lightTheme = getDefaultTheme("light");
+      expect(() => {
+        render(<MessageItem {...defaultProps} message={assistantMessage} theme={lightTheme} prismTheme="vs" />);
+      }).not.toThrow();
+    });
+
+    it("renders with various prism themes without errors", () => {
+      const lightTheme = getDefaultTheme("light");
+      const darkTheme = getDefaultTheme("dark");
+
+      const themes: PrismTheme[] = ["prism", "vs", "tomorrow", "dark", "vsc-dark-plus", "one-dark", "okaidia", "dracula"];
+
+      themes.forEach(prismTheme => {
+        expect(() => {
+          render(<MessageItem {...defaultProps} message={assistantMessage} theme={lightTheme} prismTheme={prismTheme} />);
+        }).not.toThrow();
+
+        expect(() => {
+          render(<MessageItem {...defaultProps} message={assistantMessage} theme={darkTheme} prismTheme={prismTheme} />);
+        }).not.toThrow();
       });
     });
   });
